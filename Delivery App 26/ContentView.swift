@@ -6,6 +6,12 @@ struct ContentView: View {
     // location manager to request user location
     let locationManager = CLLocationManager()
     
+    // starting navigation coordinate
+    @State private var startingLocation = CLLocationCoordinate2D.crestHill
+    
+    // ending navigation coordinate
+    @State private var endingLocation = CLLocationCoordinate2D.joliet
+    
     // route variable
     @State private var route: MKRoute?
     
@@ -24,10 +30,10 @@ struct ContentView: View {
                         .stroke(Color.blue, lineWidth: 4)
                     
                     // Starting location marker
-                    Marker("Destination", systemImage: "tree", coordinate: .crestHill)
+                    Marker("Start", systemImage: "truck.box", coordinate: startingLocation)
 
                     // Ending location Marker
-                    Marker("Destination", systemImage: "tree", coordinate: .joliet)
+                    Marker("Destination", systemImage: "scope", coordinate: endingLocation)
                 }
                 
             }
@@ -47,7 +53,7 @@ struct ContentView: View {
             .mapStyle(.hybrid)
             
         Button("Get Directions") {
-            getDirections(to: .joliet)
+            getDirections(from: .orlandPark, to: .joliet)
         }
         
             }
@@ -69,12 +75,11 @@ struct ContentView: View {
     }
     
     // function creates route from two locations
-    func getDirections(to destination: CLLocationCoordinate2D) {
+    func getDirections(from start: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) {
         Task {
-            guard let userLocation = await getUserLocation() else { return }
             
             let request = MKDirections.Request()
-            request.source = MKMapItem(placemark: .init(coordinate: userLocation))
+            request.source = MKMapItem(placemark: .init(coordinate: start))
             request.destination = MKMapItem(placemark: .init(coordinate: destination))
             request.transportType = .automobile
             
@@ -82,7 +87,10 @@ struct ContentView: View {
                 let directions = try await MKDirections(request: request).calculate()
                 route = directions.routes.first
                 // calculate camera position based on polyline coordinates
-                cameraPosition = .region(calculateRegion(for: [userLocation, destination]))
+                cameraPosition = .region(calculateRegion(for: [start, destination]))
+                // set starting and ending locations
+                startingLocation = start
+                endingLocation = destination
             } catch {
                 print("No directions found")
             }
@@ -126,7 +134,7 @@ private func calculateRegion(for coords: [CLLocationCoordinate2D]) -> MKCoordina
 extension CLLocationCoordinate2D {
     static let crestHill = CLLocationCoordinate2D(latitude: 41.5432, longitude: -88.1408)
     static let joliet = CLLocationCoordinate2D(latitude: 41.5353965, longitude: -88.0816650)
-    static let orlandPark = CLLocationCoordinate2D(latitude: 41.5353965, longitude: -88.0816650)
+    static let orlandPark = CLLocationCoordinate2D(latitude: 41.61387, longitude: -87.79368)
 }
 
 
