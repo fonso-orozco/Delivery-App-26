@@ -14,17 +14,19 @@ struct ContentView: View {
     
     var body: some View {
             // map centered on camera position
-            Map(initialPosition: cameraPosition) {
-                // location marker
-//                Marker("Crest Hill", systemImage: "laptopcomputer", coordinate: .crestHill)
-                // current user location marker
+            Map(position: $cameraPosition) {
+
                 UserAnnotation()
                 
-                // navigation line
+                // draws navigation line to map and places markers for starting and ending locations
                 if let route {
                     MapPolyline(route)
                         .stroke(Color.blue, lineWidth: 4)
                     
+                    // Starting location marker
+                    Marker("Destination", systemImage: "tree", coordinate: .crestHill)
+
+                    // Ending location Marker
                     Marker("Destination", systemImage: "tree", coordinate: .joliet)
                 }
                 
@@ -79,6 +81,8 @@ struct ContentView: View {
             do {
                 let directions = try await MKDirections(request: request).calculate()
                 route = directions.routes.first
+                // calculate camera position based on polyline coordinates
+                cameraPosition = .region(calculateRegion(for: [userLocation, destination]))
             } catch {
                 print("No directions found")
             }
@@ -87,6 +91,36 @@ struct ContentView: View {
        
 }
 
+// function to calculate MKCoordinateRegion from coordinates
+private func calculateRegion(for coords: [CLLocationCoordinate2D]) -> MKCoordinateRegion {
+    guard !coords.isEmpty else {
+        return MKCoordinateRegion()
+    }
+    
+    var minLat = coords[0].latitude
+    var maxLat = coords[0].latitude
+    var minLon = coords[0].longitude
+    var maxLon = coords[0].longitude
+    
+    for coord in coords {
+        minLat = min(minLat, coord.latitude)
+        maxLat = max(maxLat, coord.latitude)
+        minLon = min(minLon, coord.longitude)
+        maxLon = max(maxLon, coord.longitude)
+    }
+    
+    let center = CLLocationCoordinate2D(
+        latitude: (minLat + maxLat) / 2,
+        longitude: (minLon + maxLon) / 2
+    )
+    
+    let span = MKCoordinateSpan(
+        latitudeDelta: (maxLat - minLat) * 1.3, // Add 30% padding
+        longitudeDelta: (maxLon - minLon) * 1.3
+    )
+    
+    return MKCoordinateRegion(center: center, span: span)
+}
 
 // extension stores static location coordinates
 extension CLLocationCoordinate2D {
