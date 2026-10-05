@@ -6,6 +6,9 @@ struct ContentView: View {
     // location manager to request user location
     let locationManager = CLLocationManager()
     
+    // location variable for picker
+    @State private var selectedLocation: Locations = .crestHill
+    
     // starting navigation coordinate
     @State private var startingLocation = CLLocationCoordinate2D.crestHill
     
@@ -51,12 +54,29 @@ struct ContentView: View {
             }
             // map style
             .mapStyle(.hybrid)
-            
-        Button("Get Directions") {
-            getDirections(from: .orlandPark, to: .joliet)
-        }
         
+        VStack {
+            HStack {
+                Text("Starting Location")
+                    .font(.title2)
             }
+            // picker to choose from locations
+            Picker("Starting Location", selection: $selectedLocation) {
+                ForEach(Locations.allCases) { location in
+                    Text(location.locationName)
+                }
+
+            }
+            
+            // gets directions from selected location to destination
+            Button("Get Directions") {
+                getDirections(from: selectedLocation.locationCoordinate, to: .joliet)
+            }
+        }
+        // start location picker
+        
+        
+    }
            
     
     
@@ -128,6 +148,35 @@ private func calculateRegion(for coords: [CLLocationCoordinate2D]) -> MKCoordina
     )
     
     return MKCoordinateRegion(center: center, span: span)
+}
+
+// locations struct
+enum Locations: String, CaseIterable, Identifiable {
+    case crestHill, joliet, orlandPark
+    var id: Self { self }
+    
+    
+}
+
+// extension on locations struct returns location coordinate
+extension Locations {
+    
+    var locationName: String {
+        switch self {
+        case .crestHill: return "Crest Hill"
+        case .joliet: return "Joliet"
+        case .orlandPark: return "Orland Park"
+        }
+        
+    }
+    
+    var locationCoordinate: CLLocationCoordinate2D {
+        switch self {
+        case .crestHill: return .crestHill
+        case .joliet: return .joliet
+        case .orlandPark: return .orlandPark
+        }
+    }
 }
 
 // extension stores static location coordinates
