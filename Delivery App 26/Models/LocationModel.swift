@@ -4,6 +4,7 @@
 //
 //  Created by Ildefonso Orozco on 10/5/26.
 //
+//  Contains the data model for starting location. This model owns data for each data location.
 //
 
 import MapKit

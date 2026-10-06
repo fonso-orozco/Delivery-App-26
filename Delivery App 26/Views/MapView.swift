@@ -4,6 +4,10 @@
 //
 //  Created by Ildefonso Orozco on 10/5/26.
 //
+//  MapView displays starting screen - contains map, starting location picker,
+//  destination search (under construction) and button which performs the routing
+//  and calculations
+//
 
 import SwiftUI
 import MapKit
@@ -85,7 +89,7 @@ struct MapView: View {
         }
     }
     
-    // function creates route from two locations
+    // function creates route from two locations - future refactor target
     func getDirections(from start: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) {
         // set starting and ending locations
         startingLocation = start
