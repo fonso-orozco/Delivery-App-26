@@ -2,7 +2,7 @@
 //  MapViewModel.swift
 //  Delivery App 26
 //
-//  Created by Ildefonso Orozco on 10/5/26.
+//  Created by Fonso Orozco on 10/5/26.
 //
 //  MapViewModel contains supporting functions for MapView. Functions calculate the display window for the map
 //  and the user's current location

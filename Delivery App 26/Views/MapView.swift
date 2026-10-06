@@ -2,7 +2,7 @@
 //  MapView.swift
 //  Delivery App 26
 //
-//  Created by Ildefonso Orozco on 10/5/26.
+//  Created by Fonso Orozco on 10/5/26.
 //
 //  MapView displays starting screen - contains map, starting location picker,
 //  destination search (under construction) and button which performs the routing
@@ -14,7 +14,11 @@ import MapKit
 
 struct MapView: View {
 
+    // constructs MapViewModel class
     var mapViewModel = MapViewModel()
+    
+    // toggle for SearchView sheet
+    @State private var isSheetPresented: Bool = false
     
     // route variable
     @State var route: MKRoute?
@@ -53,6 +57,10 @@ struct MapView: View {
             }
                 
             }
+            .sheet(isPresented: $isSheetPresented) {
+                SearchView()
+            }
+        
             // on map open
             .onAppear {
                 // asks for user location
@@ -64,23 +72,27 @@ struct MapView: View {
                 MapCompass()
                 MapPitchToggle()
                 MapScaleView()
+            
             }
+            
+        
             // map style
             .mapStyle(.hybrid)
         
         VStack {
-            HStack {
                 Text("Starting Location")
                     .font(.title2)
-            }
             // picker to choose from locations
             Picker("Starting Location", selection: $selectedLocation) {
                 ForEach(Locations.allCases) { location in
                     Text(location.locationName)
                 }
-
             }
             
+            Button("Location Search") {
+                isSheetPresented = true
+            }
+                    
             // gets directions from selected location to destination
             Button("Get Directions") {
                 getDirections(from: selectedLocation.locationCoordinate, to: .orlandPark)
