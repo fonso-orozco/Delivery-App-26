@@ -43,6 +43,9 @@ struct MapView: View {
     // variable stores search address 
     @State private var searchResultTitle = "None"
     
+    // distance variable
+    @State var travelDistance = 0.0
+    
     var body: some View {
         Map(position: $cameraPosition) {
 
@@ -99,8 +102,13 @@ struct MapView: View {
             
             VStack {
                 Text("The address selected is")
+                    .font(.title2)
                 Text(searchResultTitle)
+                Text("The route distance is ")
+                    .font(.title2)
+                Text("\(travelDistance / 1609.34) miles")
             }
+            
             
                     
             // gets directions from selected location to destination
@@ -126,6 +134,11 @@ struct MapView: View {
             do {
                 let directions = try await MKDirections(request: request).calculate()
                 route = directions.routes.first
+                // pulls distance data from route
+                if let route = directions.routes.first {
+                    travelDistance = route.distance
+                }
+               
             } catch {
                 print("No directions found")
             }
