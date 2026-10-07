@@ -14,6 +14,7 @@ import MapKit
 
 struct MapView: View {
 
+
     // constructs MapViewModel class
     var mapViewModel = MapViewModel()
     
@@ -39,6 +40,9 @@ struct MapView: View {
     // camera position variable
     @State var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
     
+    // variable stores search address 
+    @State private var searchResultTitle = "None"
+    
     var body: some View {
         Map(position: $cameraPosition) {
 
@@ -58,7 +62,7 @@ struct MapView: View {
                 
             }
             .sheet(isPresented: $isSheetPresented) {
-                SearchView()
+                SearchView(searchResultTitle: $searchResultTitle)
             }
         
             // on map open
@@ -92,10 +96,16 @@ struct MapView: View {
             Button("Location Search") {
                 isSheetPresented = true
             }
+            
+            VStack {
+                Text("The address selected is")
+                Text(searchResultTitle)
+            }
+            
                     
             // gets directions from selected location to destination
             Button("Get Directions") {
-                getDirections(from: selectedLocation.locationCoordinate, to: .orlandPark)
+                getDirections(from: selectedLocation.locationCoordinate, to: .joliet)
                 cameraPosition = .region(mapViewModel.calculateRegion(for: [startingLocation, endingLocation]))
             }
         }
@@ -123,6 +133,8 @@ struct MapView: View {
         }
     }
 }
+
+
 
 
 #Preview {

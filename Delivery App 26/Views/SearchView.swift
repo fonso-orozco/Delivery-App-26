@@ -13,6 +13,12 @@ struct SearchView: View {
     // variable stores location search instance
     @State var locationSearch = LocationSearchService()
     
+    // binding variable to pass data back to MapView
+    @Binding var searchResultTitle: String
+    
+    // variable to dismiss sheet when result is selected from list
+    @Environment(\.dismiss) private var dismiss
+    
     
     var body: some View {
 
@@ -20,7 +26,7 @@ struct SearchView: View {
             // Search textfield
             HStack {
                 Image(systemName: "magnifyingglass")
-                TextField("Search for a jobsite", text: $locationSearch.query)
+                TextField("Enter address", text: $locationSearch.query)
                     .autocorrectionDisabled()
                 }
                 .modifier(TextFieldGrayBackgroundColor())
@@ -28,7 +34,7 @@ struct SearchView: View {
                 Spacer()
             
             if locationSearch.results.isEmpty {
-                ContentUnavailableView("No results", systemImage: "questionmark.square.dashed")
+                ContentUnavailableView("Search for jobsite", systemImage: "magnifyingglass")
             } else {
                 List(locationSearch.results) { result in
                     VStack(alignment: .leading) {
@@ -37,15 +43,16 @@ struct SearchView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                    .onTapGesture {
+                        // sends selected address to MapView
+                        searchResultTitle = " \(result.title) \n \(result.subtitle)"
+                        dismiss()
+                        }
+                    }
                 }
-                
             }
-            
-            }
-                .padding()
-                // Won't allow user to swipe down until search is completed - currently disabled
-//                .interactiveDismissDisabled()
                 // styling
+                .padding()
                 .presentationDetents([.large])
                 .presentationBackground(.regularMaterial)
                 .presentationBackgroundInteraction(.enabled(upThrough: .large))
@@ -64,5 +71,6 @@ struct TextFieldGrayBackgroundColor: ViewModifier {
 }
 
 #Preview {
-    SearchView()
+    @Previewable @State var searchResultTitle: String = "Blank"
+    SearchView(searchResultTitle: $searchResultTitle)
 }
