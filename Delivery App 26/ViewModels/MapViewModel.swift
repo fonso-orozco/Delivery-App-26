@@ -8,17 +8,7 @@
 //  and the user's current location
 //
 
-import SwiftUI
 import MapKit
-
-
-@Observable
-final class MapViewModel {
-    
-    
-    
-    
-    
     
     
     // function to calculate MKCoordinateRegion from coordinates
@@ -65,8 +55,4 @@ final class MapViewModel {
             return nil
         }
     }
-
-    
-}
-
 

@@ -14,9 +14,6 @@ import MapKit
 
 struct MapView: View {
 
-
-    // constructs MapViewModel class
-    var mapViewModel = MapViewModel()
     
     // toggle for SearchView sheet
     @State private var isSheetPresented: Bool = false
@@ -25,10 +22,10 @@ struct MapView: View {
     @State var route: MKRoute?
     
 //     starting navigation coordinate
-    @State private var startingLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+    @State var startingLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
     
 //     ending navigation coordinate
-    @State private var endingLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+    @State var endingLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
 
     
     // location manager to request user location
@@ -114,7 +111,7 @@ struct MapView: View {
             // gets directions from selected location to destination
             Button("Get Directions") {
                 getDirections(from: selectedLocation.locationCoordinate, to: .joliet)
-                cameraPosition = .region(mapViewModel.calculateRegion(for: [startingLocation, endingLocation]))
+                cameraPosition = .region(calculateRegion(for: [startingLocation, endingLocation]))
             }
         }
     }
