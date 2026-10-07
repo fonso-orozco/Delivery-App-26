@@ -10,7 +10,51 @@
 
 import MapKit
     
+// function creates route from coordinates and gets route distance
+@Observable
+class LocationRouteService: NSObject {
     
+    // route variable
+        var route: MKRoute?
+    
+    //     starting navigation coordinate
+        var startingLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+        
+    //     ending navigation coordinate
+        var endingLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+
+    // distance variable
+        var travelDistance = 0.0
+    
+    // function creates route from two locations - future refactor target
+    func getDirections(from start: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) {
+        // set starting and ending locations
+        startingLocation = start
+        endingLocation = destination
+        
+        Task {
+            let request = MKDirections.Request()
+            request.source = MKMapItem(placemark: .init(coordinate: start))
+            request.destination = MKMapItem(placemark: .init(coordinate: destination))
+            request.transportType = .automobile
+            
+            do {
+                let directions = try await MKDirections(request: request).calculate()
+                route = directions.routes.first
+                // pulls distance data from route
+                if let route = directions.routes.first {
+                    travelDistance = route.distance
+                }
+               
+            } catch {
+                print("No directions found")
+            }
+            
+        }
+    }
+    
+}
+
     // function to calculate MKCoordinateRegion from coordinates
     func calculateRegion(for coords: [CLLocationCoordinate2D]) -> MKCoordinateRegion {
         guard !coords.isEmpty else {
