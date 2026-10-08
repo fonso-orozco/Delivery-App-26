@@ -24,6 +24,8 @@ struct MapView: View {
     
     // location variable for picker
     @State private var selectedLocation: Locations = .crestHill
+    
+    @State private var destination: MKMapItem?
   
     // camera position variable
     @State var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
@@ -44,9 +46,8 @@ struct MapView: View {
                     
                     // Starting location marker
                 Marker("Start", systemImage: "truck.box", coordinate: routeService.startingLocation)
-
-                    // Ending location Marker
                 Marker("Destination", systemImage: "scope", coordinate: routeService.endingLocation)
+                
             }
                 
             }
@@ -99,8 +100,25 @@ struct MapView: View {
                     
             // gets directions from selected location to destination
             Button("Get Directions") {
-                routeService.getDirections(from: selectedLocation.locationCoordinate, to: .joliet)
-                cameraPosition = .region(calculateRegion(for: [routeService.startingLocation, routeService.endingLocation]))
+              
+                Task {
+                    
+                    var addressMapItems = [MKMapItem]()
+                        if let request = MKGeocodingRequest(addressString: searchResultTitle) {
+                            do {
+                                let mapitems = try await request.mapItems
+                                if let mapitem = mapitems.first {
+                                    addressMapItems.append(mapitem)
+                                }
+                            } catch let error {
+                                print("error: \(error)")
+                            }
+                        }
+                    if let destination = addressMapItems.first {
+                        routeService.getDirections(from: selectedLocation.locationCoordinate, to: destination)
+                        cameraPosition = .automatic
+                    }
+                }
             }
         }
     }

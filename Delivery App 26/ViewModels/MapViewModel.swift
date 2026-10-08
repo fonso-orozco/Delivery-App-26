@@ -27,15 +27,16 @@ class LocationRouteService: NSObject {
         var travelDistance = 0.0
     
     // function creates route from two locations - future refactor target
-    func getDirections(from start: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) {
+    func getDirections(from start: CLLocationCoordinate2D, to destination: MKMapItem) {
         // set starting and ending locations
         startingLocation = start
-        endingLocation = destination
+        endingLocation = destination.location.coordinate
         
         Task {
             let request = MKDirections.Request()
             request.source = MKMapItem(placemark: .init(coordinate: start))
-            request.destination = MKMapItem(placemark: .init(coordinate: destination))
+            request.destination = destination
+
             request.transportType = .automobile
             
             do {
