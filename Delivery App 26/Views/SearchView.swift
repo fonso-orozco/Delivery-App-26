@@ -16,6 +16,9 @@ struct SearchView: View {
     // binding variable to pass data back to MapView
     @Binding var searchResultTitle: String
     
+    @Binding var isDataEntrySheetPresented: Bool
+    
+    
     // variable to dismiss sheet when result is selected from list
     @Environment(\.dismiss) private var dismiss
     
@@ -34,7 +37,7 @@ struct SearchView: View {
                 Spacer()
             
             if locationSearch.results.isEmpty {
-                ContentUnavailableView("Search for jobsite", systemImage: "magnifyingglass")
+                ContentUnavailableView("Search for a jobsite", systemImage: "magnifyingglass")
             } else {
                 List(locationSearch.results) { result in
                     VStack(alignment: .leading) {
@@ -46,6 +49,7 @@ struct SearchView: View {
                     .onTapGesture {
                         // sends selected address to MapView
                         searchResultTitle = " \(result.title) \n \(result.subtitle)"
+                        isDataEntrySheetPresented = true
                         dismiss()
                         }
                     }
@@ -70,7 +74,7 @@ struct TextFieldGrayBackgroundColor: ViewModifier {
     }
 }
 
-#Preview {
-    @Previewable @State var searchResultTitle: String = "Blank"
-    SearchView(searchResultTitle: $searchResultTitle)
-}
+//#Preview {
+//    @Previewable @State var searchResultTitle: String = "Blank"
+//    SearchView(searchResultTitle: $searchResultTitle, isDataEntrySheetPresented: $isDataEntrySheetPresented)
+//}

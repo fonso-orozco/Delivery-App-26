@@ -14,15 +14,16 @@ import MapKit
 
 struct MapView: View {
 
-    var routeService = LocationRouteService()
+    @State private var routeService = LocationRouteService()
     
     // toggle for SearchView sheet
-    @State private var isSheetPresented: Bool = false
+    @State private var isSearchSheetPresented: Bool = false
+    @State private var isDataEntrySheetPresented: Bool = false
        
     // location manager to request user location
     let locationManager = CLLocationManager()
     
-    // location variable for picker
+//    // location variable for picker
     @State private var selectedLocation: Locations = .crestHill
     
     @State private var destination: MKMapItem?
@@ -35,96 +36,78 @@ struct MapView: View {
     
 
     var body: some View {
-        Map(position: $cameraPosition) {
-
+        
+        ZStack(alignment: .bottomTrailing) {
+            Map(position: $cameraPosition) {
+                
                 UserAnnotation()
                 
-            if let route = routeService.route {
-              // draws navigation line to map and places markers for starting and ending                 locations
-                MapPolyline(route)
-                    .stroke(Color.blue, lineWidth: 4)
+                if let route = routeService.route {
+                    // draws navigation line to map and places markers for starting and ending                 locations
+                    MapPolyline(route)
+                        .stroke(Color.blue, lineWidth: 4)
                     
                     // Starting location marker
-                Marker("Start", systemImage: "truck.box", coordinate: routeService.startingLocation)
-                Marker("Destination", systemImage: "scope", coordinate: routeService.endingLocation)
+                    Marker("Start", systemImage: "truck.box", coordinate: routeService.startingLocation)
+                    Marker("Destination", systemImage: "scope", coordinate: routeService.endingLocation)
+                    
+                }
                 
             }
-                
+            .sheet(isPresented: $isSearchSheetPresented) {
+                SearchView(searchResultTitle: $searchResultTitle, isDataEntrySheetPresented: $isDataEntrySheetPresented)
             }
-            .sheet(isPresented: $isSheetPresented) {
-                SearchView(searchResultTitle: $searchResultTitle)
-            }
-        
+           
             // on map open
             .onAppear {
                 // asks for user location
                 locationManager.requestWhenInUseAuthorization()
-                }
+            }
             // map controls
             .mapControls {
                 MapUserLocationButton()
                 MapCompass()
                 MapPitchToggle()
                 MapScaleView()
-            
-            }
-            
-        
-            // map style
-            .mapStyle(.hybrid)
-        
-        VStack {
-                Text("Starting Location")
-                    .font(.title2)
-            // picker to choose from locations
-            Picker("Starting Location", selection: $selectedLocation) {
-                ForEach(Locations.allCases) { location in
-                    Text(location.locationName)
-                }
-            }
-            
-            Button("Location Search") {
-                isSheetPresented = true
-            }
-            
-            VStack {
-                Text("The address selected is")
-                    .font(.title2)
-                Text(searchResultTitle)
-                Text("The route distance is ")
-                    .font(.title2)
-                Text("\(routeService.travelDistance / 1609.34) miles")
             }
             
             
+            if isDataEntrySheetPresented {
+                EnterDataView(searchResultTitle: $searchResultTitle, isDataEntrySheetPresented: $isDataEntrySheetPresented, routeService: $routeService)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 300)
+            }
+           
+            if isDataEntrySheetPresented == false {
+                Button {
+                    isSearchSheetPresented = true
+                    cameraPosition = .automatic
+
                     
-            // gets directions from selected location to destination
-            Button("Get Directions") {
-              
-                Task {
-                    
-                    var addressMapItems = [MKMapItem]()
-                        if let request = MKGeocodingRequest(addressString: searchResultTitle) {
-                            do {
-                                let mapitems = try await request.mapItems
-                                if let mapitem = mapitems.first {
-                                    addressMapItems.append(mapitem)
-                                }
-                            } catch let error {
-                                print("error: \(error)")
-                            }
-                        }
-                    if let destination = addressMapItems.first {
-                        routeService.getDirections(from: selectedLocation.locationCoordinate, to: destination)
-                        cameraPosition = .automatic
-                    }
-                }
+                         } label: {
+                             Image(systemName: "plus")
+                                 .font(.title2.weight(.bold))
+                                 .foregroundColor(.white)
+                                 .padding(20)
+                                 .background(Color.blue)
+                                 .clipShape(Circle())
+                                 // Simulates depth to look like it hovers
+                                 .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 3)
+                         }
+                         .padding(.trailing, 20) // Push away from the right edge
+                         .padding(.bottom, 20)   // Push away from the bottom edge
+                         
+                     }
             }
         }
+        
     }
-    
 
-}
+        
+        
+       
+      
+    
 
 
 
