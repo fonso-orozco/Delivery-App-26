@@ -2,7 +2,7 @@
 //  EnterDataView.swift
 //  Delivery App 26
 //
-//  Created by Ildefonso Orozco on 10/9/26.
+//  Created by Fonso Orozco on 10/9/26.
 //
 
 import SwiftUI
@@ -14,19 +14,23 @@ struct EnterDataView: View {
     
     // location variable for picker
     @State private var selectedLocation: Locations = .crestHill
-    
+    // vehicle variabl efor picker
     @State private var selectedVehicle: Vehicles = .truck
     
+    // variable to bring up SearchView
     @State private var isSearchSheetPresented: Bool = false
+    // environment varibale to dismiss view
+    @Environment(\.dismiss) var dismiss
+    
+    // binding variables passed in from MapView
     @Binding var searchResultTitle: String
     @Binding var isDataEntrySheetPresented: Bool
     @Binding var routeService: LocationRouteService
 
     
-    @Environment(\.dismiss) var dismiss
-    
     var body: some View {
         VStack {
+        // button displays search results. Brings up SearchView when tapped to enter new address
             Button {
                 isSearchSheetPresented = true
             } label: {
@@ -38,7 +42,8 @@ struct EnterDataView: View {
             }
             .buttonStyle(.bordered)
             .padding()
-            
+        
+            // starting location segmented picker
             VStack(alignment: .leading) {
                 
                 Text("Starting Location")
@@ -54,6 +59,7 @@ struct EnterDataView: View {
                 .padding(.trailing, 10)
             }
             
+            // selected vehicle segmented picker
             VStack(alignment: .leading) {
                 
                 Text("Select Vehicle")
@@ -70,7 +76,7 @@ struct EnterDataView: View {
             }
             
             HStack {
-                // cancel button
+                // cancel button returns user to MapView
                 Button {
                     isDataEntrySheetPresented = false
                 } label: {
@@ -87,7 +93,7 @@ struct EnterDataView: View {
                 .padding(.bottom, 20)   // Push away from the bottom edge
                 
                 
-                // calculate button
+                // calculate button - calculates the route - will soon bring up ResultsView with calculations
                 Button {
                     Task {
                         
@@ -112,7 +118,6 @@ struct EnterDataView: View {
                     
                     isDataEntrySheetPresented = false
 
-                    
                 } label: {
                     Image(systemName: "checkmark")
                         .font(.title2.weight(.bold))

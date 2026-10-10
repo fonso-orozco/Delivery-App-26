@@ -16,6 +16,7 @@ struct SearchView: View {
     // binding variable to pass data back to MapView
     @Binding var searchResultTitle: String
     
+    // bindinv variable to dismiss view
     @Binding var isDataEntrySheetPresented: Bool
     
     
@@ -46,8 +47,8 @@ struct SearchView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                    // sends selected address to MapView when list item is tapped
                     .onTapGesture {
-                        // sends selected address to MapView
                         searchResultTitle = " \(result.title) \n \(result.subtitle)"
                         isDataEntrySheetPresented = true
                         dismiss()

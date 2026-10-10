@@ -23,9 +23,10 @@ struct MapView: View {
     // location manager to request user location
     let locationManager = CLLocationManager()
     
-//    // location variable for picker
+    // location variable for picker
     @State private var selectedLocation: Locations = .crestHill
     
+    // destination variable
     @State private var destination: MKMapItem?
   
     // camera position variable
@@ -41,26 +42,26 @@ struct MapView: View {
             Map(position: $cameraPosition) {
                 
                 UserAnnotation()
-                
+            // draws navigation line to map and places markers for starting and ending                 locations
                 if let route = routeService.route {
-                    // draws navigation line to map and places markers for starting and ending                 locations
+                  
+                    // route polyine
                     MapPolyline(route)
                         .stroke(Color.blue, lineWidth: 4)
                     
                     // Starting location marker
                     Marker("Start", systemImage: "truck.box", coordinate: routeService.startingLocation)
                     Marker("Destination", systemImage: "scope", coordinate: routeService.endingLocation)
-                    
                 }
                 
             }
+            // search sheet sheet view
             .sheet(isPresented: $isSearchSheetPresented) {
                 SearchView(searchResultTitle: $searchResultTitle, isDataEntrySheetPresented: $isDataEntrySheetPresented)
             }
            
-            // on map open
+            // on app open asks for user location
             .onAppear {
-                // asks for user location
                 locationManager.requestWhenInUseAuthorization()
             }
             // map controls
@@ -71,19 +72,17 @@ struct MapView: View {
                 MapScaleView()
             }
             
-            
+            // if button is tapped show EnterDataView
             if isDataEntrySheetPresented {
                 EnterDataView(searchResultTitle: $searchResultTitle, isDataEntrySheetPresented: $isDataEntrySheetPresented, routeService: $routeService)
                     .frame(maxWidth: .infinity)
                     .frame(height: 300)
             }
-           
+           // otherwise show plus button which presents EnterDataView
             if isDataEntrySheetPresented == false {
                 Button {
                     isSearchSheetPresented = true
                     cameraPosition = .automatic
-
-                    
                          } label: {
                              Image(systemName: "plus")
                                  .font(.title2.weight(.bold))
@@ -98,19 +97,9 @@ struct MapView: View {
                          .padding(.bottom, 20)   // Push away from the bottom edge
                          
                      }
+                }
             }
-        }
-        
     }
-
-        
-        
-       
-      
-    
-
-
-
 
 #Preview {
     MapView()

@@ -2,7 +2,7 @@
 //  VehicleModel.swift
 //  Delivery App 26
 //
-//  Created by Ildefonso Orozco on 10/9/26.
+//  Created by Fonso Orozco on 10/9/26.
 //
 
 import SwiftUI
@@ -13,6 +13,7 @@ enum Vehicles: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
+// vehicles extension, returns name - will update to return delivery rate multiplier
 extension Vehicles {
     
     var vehicleName: String {

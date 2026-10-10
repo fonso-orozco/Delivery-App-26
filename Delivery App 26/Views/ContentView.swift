@@ -8,6 +8,7 @@ struct ContentView: View {
 
     
     var body: some View {
+        // calls map screen from start
         MapView()
     }
                   
