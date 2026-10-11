@@ -14,8 +14,8 @@ struct EnterDataView: View {
     
     // location variable for picker
     @State private var selectedLocation: Locations = .crestHill
-    // vehicle variabl efor picker
-    @State private var selectedVehicle: Vehicles = .truck
+    // vehicle variable for picker, Truck and Trailer as default
+    @State private var selectedVehicle: Vehicles = .truckAndTrailer
     
     // variable to bring up SearchView
     @State private var isSearchSheetPresented: Bool = false
