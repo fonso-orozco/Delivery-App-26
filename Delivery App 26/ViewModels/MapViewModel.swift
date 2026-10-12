@@ -26,8 +26,13 @@ class LocationRouteService: NSObject {
     // distance variable
         var travelDistance = 0.0
     
-    // function creates route from two locations - future refactor target
-        func getDirections(from start: CLLocationCoordinate2D, to destination: MKMapItem) {
+    // expected travel time
+        var expectedTravelTime = 0.0
+    
+    var totalCost = 0.0
+    
+    // function creates route from two locations and vehicle type
+    func getDirections(from start: CLLocationCoordinate2D, to destination: MKMapItem, vehicleMultiplier: Double) {
         
     // set starting and ending locations
         startingLocation = start
@@ -47,6 +52,8 @@ class LocationRouteService: NSObject {
                 // pulls distance data from route
                 if let route = directions.routes.first {
                     travelDistance = route.distance
+                    expectedTravelTime = route.expectedTravelTime
+                    calculateCost(travelDistance: travelDistance, vehicleMultiplier: vehicleMultiplier)
                 }
                
             } catch {
@@ -56,38 +63,25 @@ class LocationRouteService: NSObject {
         }
     }
     
-}
-
-    // function to calculate MKCoordinateRegion from coordinates
-    func calculateRegion(for coords: [CLLocationCoordinate2D]) -> MKCoordinateRegion {
-        guard !coords.isEmpty else {
-            return MKCoordinateRegion()
-        }
-        
-        var minLat = coords[0].latitude
-        var maxLat = coords[0].latitude
-        var minLon = coords[0].longitude
-        var maxLon = coords[0].longitude
-        
-        for coord in coords {
-            minLat = min(minLat, coord.latitude)
-            maxLat = max(maxLat, coord.latitude)
-            minLon = min(minLon, coord.longitude)
-            maxLon = max(maxLon, coord.longitude)
-        }
-        
-        let center = CLLocationCoordinate2D(
-            latitude: (minLat + maxLat) / 2,
-            longitude: (minLon + maxLon) / 2
-        )
-        
-        let span = MKCoordinateSpan(
-            latitudeDelta: (maxLat - minLat) * 1.3, // Add 30% padding
-            longitudeDelta: (maxLon - minLon) * 1.3
-        )
-        
-        return MKCoordinateRegion(center: center, span: span)
+    // calculates delivery cost based on base rate, vehicle type and distance
+    func calculateCost(travelDistance: Double, vehicleMultiplier: Double) {
+    
+        let travelInMiles = travelDistance / 1609
+        let baseDelivery = 200.0
+        let costPerMile = 10.0
+    
+        print(travelInMiles)
+    
+        if travelInMiles < 5.0 {
+        totalCost = baseDelivery * vehicleMultiplier
+    } else {
+        totalCost = baseDelivery + (costPerMile * travelInMiles) * vehicleMultiplier
     }
+
+
+    }
+    
+}
 
     // get user location coordinate
     func getUserLocation() async -> CLLocationCoordinate2D? {

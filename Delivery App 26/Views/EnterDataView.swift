@@ -11,23 +11,22 @@ import MapKit
 struct EnterDataView: View {
     
 
-    
+
     // location variable for picker
     @State private var selectedLocation: Locations = .crestHill
     // vehicle variable for picker, Truck and Trailer as default
-    @State private var selectedVehicle: Vehicles = .truckAndTrailer
     
     // variable to bring up SearchView
     @State private var isSearchSheetPresented: Bool = false
-    // environment varibale to dismiss view
-    @Environment(\.dismiss) var dismiss
     
     // binding variables passed in from MapView
+    @Binding var selectedVehicle: Vehicles
     @Binding var searchResultTitle: String
     @Binding var isDataEntrySheetPresented: Bool
     @Binding var routeService: LocationRouteService
+    @Binding var isResultsSheetPresented: Bool
+    @Binding var showPolyLine: Bool
 
-    
     var body: some View {
         VStack {
         // button displays search results. Brings up SearchView when tapped to enter new address
@@ -111,12 +110,14 @@ struct EnterDataView: View {
                             }
                         if let destination = addressMapItems.first {
                             // call route service
-                            routeService.getDirections(from: selectedLocation.locationCoordinate, to: destination)
-//                            cameraPosition = .automatic
+                            routeService.getDirections(from: selectedLocation.locationCoordinate, to: destination, vehicleMultiplier: selectedVehicle.vehicleMultiplier)
+
                         }
                     }
                     
+                    showPolyLine = true
                     isDataEntrySheetPresented = false
+                    isResultsSheetPresented = true
 
                 } label: {
                     Image(systemName: "checkmark")
