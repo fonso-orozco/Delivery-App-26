@@ -4,6 +4,7 @@
 //
 //  Created by Fonso Orozco on 10/9/26.
 //
+// This model holds information on selected vehicle, including vehicle type, name and cost multipier
 
 import SwiftUI
 
@@ -25,6 +26,7 @@ extension Vehicles {
         
     }
     
+    // cost multiplier
     var vehicleMultiplier: Double {
         switch self {
         case .truck: return 1.0

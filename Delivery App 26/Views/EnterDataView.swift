@@ -77,7 +77,9 @@ struct EnterDataView: View {
             HStack {
                 // cancel button returns user to MapView
                 Button {
-                    isDataEntrySheetPresented = false
+                    withAnimation {
+                        isDataEntrySheetPresented = false
+                    }
                 } label: {
                     Image(systemName: "xmark")
                         .font(.title2.weight(.bold))
@@ -114,10 +116,12 @@ struct EnterDataView: View {
 
                         }
                     }
+                    withAnimation {
+                        showPolyLine = true
+                        isDataEntrySheetPresented = false
+                        isResultsSheetPresented = true
+                    }
                     
-                    showPolyLine = true
-                    isDataEntrySheetPresented = false
-                    isResultsSheetPresented = true
 
                 } label: {
                     Image(systemName: "checkmark")
@@ -149,5 +153,11 @@ struct EnterDataView: View {
 }
 
 //#Preview {
-//    EnterDataView()
+//    @Previewable @State var selectedVehicle: Vehicles = .truckAndTrailer
+//    @Previewable @State var searchResultTitle: String = "Empty"
+//    @Previewable @State var isDataEntrySheetPresented: Bool = true
+//    @Previewable @State var routeService: LocationRouteService
+//    @Previewable @State var isResultsSheetPresented: Bool = false
+//    @Previewable @State var showPolyLine: Bool = false
+//    EnterDataView(selectedVehicle: $selectedVehicle, searchResultTitle: $searchResultTitle, isDataEntrySheetPresented: $isDataEntrySheetPresented, routeService: $routeService, isResultsSheetPresented: $isResultsSheetPresented, showPolyLine: $showPolyLine)
 //}

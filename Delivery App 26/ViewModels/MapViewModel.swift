@@ -14,6 +14,7 @@ import MapKit
 @Observable
 class LocationRouteService: NSObject {
     
+    
     // route variable
         var route: MKRoute?
     

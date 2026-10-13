@@ -50,8 +50,10 @@ struct SearchView: View {
                     // sends selected address to MapView when list item is tapped
                     .onTapGesture {
                         searchResultTitle = " \(result.title) \n \(result.subtitle)"
-                        isDataEntrySheetPresented = true
-                        dismiss()
+                        withAnimation {
+                            isDataEntrySheetPresented = true
+                            dismiss()
+                        }
                         }
                     }
                 }

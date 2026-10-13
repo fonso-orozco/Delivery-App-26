@@ -24,10 +24,13 @@ struct ResultsView: View {
             Text("The cost for this delivery is \(routeService.totalCost) dollars")
             
             HStack {
-                // cancel button returns user to MapView
+                // done button returns user to MapView
                 Button {
-                    isResultsSheetPresented = false
-                    showPolyLine = false
+                    withAnimation {
+                        isResultsSheetPresented = false
+                        showPolyLine = false
+                    }
+
                 } label: {
                     HStack {
                         Text("Done")
