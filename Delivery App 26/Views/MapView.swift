@@ -20,6 +20,8 @@ struct MapView: View {
     @State private var isSearchSheetPresented: Bool = false
     @State private var isDataEntrySheetPresented: Bool = false
     @State private var isResultsSheetPresented: Bool = false
+    
+    // variable to draw polyline on map
     @State private var showPolyLine: Bool = false
     
     // variable for vehicle type picker
@@ -49,7 +51,7 @@ struct MapView: View {
                 Map(position: $cameraPosition) {
                     
                     UserAnnotation()
-                // draws navigation line to map and places markers for starting and ending                 locations
+                // draws navigation line to map and places markers for starting and ending locations
                     if showPolyLine {
                         if let route = routeService.route {
                           
@@ -115,7 +117,7 @@ struct MapView: View {
         
                 }
         
-        // if calculate button is pressed, results are shown
+        // if calculate button is pressed, results screen is shown
         if isResultsSheetPresented {
                 
             ResultsView(isResultsSheetPresented: $isResultsSheetPresented, showPolyLine: $showPolyLine, routeService: $routeService)

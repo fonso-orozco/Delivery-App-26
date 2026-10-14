@@ -151,13 +151,3 @@ struct EnterDataView: View {
         }
     }
 }
-
-//#Preview {
-//    @Previewable @State var selectedVehicle: Vehicles = .truckAndTrailer
-//    @Previewable @State var searchResultTitle: String = "Empty"
-//    @Previewable @State var isDataEntrySheetPresented: Bool = true
-//    @Previewable @State var routeService: LocationRouteService
-//    @Previewable @State var isResultsSheetPresented: Bool = false
-//    @Previewable @State var showPolyLine: Bool = false
-//    EnterDataView(selectedVehicle: $selectedVehicle, searchResultTitle: $searchResultTitle, isDataEntrySheetPresented: $isDataEntrySheetPresented, routeService: $routeService, isResultsSheetPresented: $isResultsSheetPresented, showPolyLine: $showPolyLine)
-//}
