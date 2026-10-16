@@ -20,8 +20,12 @@ struct ResultsView: View {
         
         VStack {
             Text("The delivery distance is \(routeService.travelDistance / 1609) miles")
+                .clipShape(.capsule)
+                .background(Color.gray)
             Text("The estimated travel time is \(routeService.expectedTravelTime / 3600) hours")
+                .clipShape(.capsule)
             Text("The cost for this delivery is \(routeService.totalCost) dollars")
+                .clipShape(.capsule)
             
             HStack {
                 // done button returns user to MapView
@@ -50,7 +54,7 @@ struct ResultsView: View {
             }
         }
             .frame(maxWidth: .infinity)
-            .frame(height: 400)
+            .frame(height: 200)
             .background(.background)
             .clipShape(.rect)
             .cornerRadius(20)
