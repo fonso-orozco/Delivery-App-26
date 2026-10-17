@@ -21,7 +21,6 @@ struct ResultsView: View {
         VStack {
             Text("The delivery distance is \(routeService.travelDistance / 1609) miles")
                 .clipShape(.capsule)
-                .background(Color.gray)
             Text("The estimated travel time is \(routeService.expectedTravelTime / 3600) hours")
                 .clipShape(.capsule)
             Text("The cost for this delivery is \(routeService.totalCost) dollars")
@@ -47,8 +46,8 @@ struct ResultsView: View {
                         // Simulates depth to look like it hovers
                             .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 3)
                     }
-                    .padding(.trailing, 20) // Push away from the right edge
-                    .padding(.bottom, 20)   // Push away from the bottom edge
+//                    .padding(.trailing, 20) // Push away from the right edge
+//                    .padding(.bottom, 20)   // Push away from the bottom edge
                     
                 }
             }
