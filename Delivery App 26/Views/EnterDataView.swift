@@ -40,8 +40,8 @@ struct EnterDataView: View {
                 }
                 
             }
-            .buttonStyle(.bordered)
-            .padding()
+//            .buttonStyle(.bordered)
+            .padding(5)
         
             // starting location segmented picker
             VStack(alignment: .leading) {
@@ -58,6 +58,7 @@ struct EnterDataView: View {
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
             }
+            .padding(5)
             
             // selected vehicle segmented picker
             VStack(alignment: .leading) {
@@ -74,6 +75,7 @@ struct EnterDataView: View {
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
             }
+            .padding(5)
             
             HStack {
                 // cancel button returns user to MapView
@@ -87,14 +89,11 @@ struct EnterDataView: View {
                         .foregroundColor(.white)
                         .padding(20)
                         .background(Color.red)
-                        .clipShape(.capsule)
+                        .clipShape(.ellipse)
                     // Simulates depth to look like it hovers
                         .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 3)
                 }
-                .padding(.trailing, 20) // Push away from the right edge
-                .padding(.bottom, 20)   // Push away from the bottom edge
-                
-                
+                .padding(.trailing, 30)
                 // calculate button - calculates the route - will soon bring up ResultsView with calculations
                 Button {
                     Task {
@@ -130,17 +129,15 @@ struct EnterDataView: View {
                         .foregroundColor(.white)
                         .padding(20)
                         .background(Color.green)
-                        .clipShape(.capsule)
+                        .clipShape(.ellipse)
                     // Simulates depth to look like it hovers
                         .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 3)
                 }
-                .padding(.trailing, 20) // Push away from the right edge
-                .padding(.bottom, 20)   // Push away from the bottom edge
             }
             
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 400)
+        .frame(height: 300)
         .background(.background)
         .clipShape(.rect)
         .cornerRadius(20)

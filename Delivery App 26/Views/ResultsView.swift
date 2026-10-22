@@ -19,13 +19,47 @@ struct ResultsView: View {
     var body: some View {
         
         VStack {
-            Text("The delivery distance is \(routeService.travelDistance / 1609) miles")
-                .clipShape(.capsule)
-            Text("The estimated travel time is \(routeService.expectedTravelTime / 3600) hours")
-                .clipShape(.capsule)
-            Text("The cost for this delivery is \(routeService.totalCost) dollars")
-                .clipShape(.capsule)
+            // delivery distance
+            HStack {
+                Text("The delivery distance is")
+//                    .padding(.trailing, 40)
+                Spacer()
+                Text("\(routeService.travelDistance / 1609) n mi")
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.systemGray5).opacity(0.7)))
+            .padding(.leading, 15)
+            .padding(.trailing, 15)
             
+            // travel time
+            HStack {
+                Text("The estimated travel time is")
+                Spacer()
+                Text("\(routeService.expectedTravelTime / 3600) h")
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.systemGray5).opacity(0.7)))
+            .padding(.leading, 15)
+            .padding(.trailing, 15)
+
+            // cost info
+            
+            HStack {
+                Text("The cost for this delivery is ")
+                Spacer()
+                Text("$\(routeService.totalCost)")
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.systemGray5).opacity(0.7)))
+            .padding(.leading, 15)
+            .padding(.trailing, 15)
+                        
             HStack {
                 // done button returns user to MapView
                 Button {
@@ -37,7 +71,6 @@ struct ResultsView: View {
                 } label: {
                     HStack {
                         Text("Done")
-                        Image(systemName: "xmark")
                             .font(.title2.weight(.bold))
                             .foregroundColor(.white)
                             .padding(20)
@@ -46,17 +79,10 @@ struct ResultsView: View {
                         // Simulates depth to look like it hovers
                             .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 3)
                     }
-//                    .padding(.trailing, 20) // Push away from the right edge
-//                    .padding(.bottom, 20)   // Push away from the bottom edge
                     
                 }
             }
         }
-            .frame(maxWidth: .infinity)
-            .frame(height: 200)
-            .background(.background)
-            .clipShape(.rect)
-            .cornerRadius(20)
     }
     
 }
